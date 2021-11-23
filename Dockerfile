@@ -14,7 +14,7 @@ ARG KUBECTL_VERSION="1.22.2"
 ARG HELM_VERSION="3.7.1"
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    ca-certificates curl git jq openssh-client netcat neovim python3 python3-pip unzip wget && \
+    ca-certificates curl git jq openssh-client netcat neovim python3 python3-pip python3-netaddr unzip wget && \
     rm -rf /var/lib/apt/lists/*
 
 RUN wget https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip && \
@@ -33,6 +33,8 @@ RUN wget https://releases.hashicorp.com/packer/${PACKER_VERSION}/packer_${PACKER
     mv packer /usr/local/bin/ && \
     rm packer_${PACKER_VERSION}_linux_amd64.zip && \
     packer --version
+
+RUN python3 -m pip install --no-cache-dir --upgrade pip
 
 RUN python3 -m pip install --no-cache-dir \
         awscli==${AWS_CLI_VERSION} \
