@@ -12,6 +12,7 @@ ARG AWS_CLI_VERSION="1.18.147"
 ARG AWS_IAM_AUTHENTICATOR_VERSION="1.21.2"
 ARG KUBECTL_VERSION="1.22.2"
 ARG HELM_VERSION="3.7.1"
+ARG SOPS_VERSION="3.7.2"
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     ca-certificates curl git jq less openssh-client netcat neovim python3 python3-pip python3-netaddr unzip wget && \
@@ -57,6 +58,11 @@ RUN wget https://get.helm.sh/helm-v${HELM_VERSION}-linux-amd64.tar.gz && \
     mv linux-amd64/helm /usr/local/bin/ && \
     rm -r helm-v${HELM_VERSION}-linux-amd64.tar.gz linux-amd64 && \
     helm version
+
+RUN wget https://github.com/mozilla/sops/releases/download/v${SOPS_VERSION}/sops-v${SOPS_VERSION}.linux.amd64 && \
+    mv sops-v${SOPS_VERSION}.linux.amd64 /usr/local/bin/sops && \
+    chmod +x /usr/local/bin/sops && \
+    sops -version
 
 RUN groupadd -g ${IAC_GID} ${IAC_NAME}
 RUN adduser ${IAC_NAME} --uid ${IAC_UID} --gid ${IAC_GID}
