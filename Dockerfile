@@ -8,8 +8,8 @@ ARG TERRAFORM_VERSION="1.0.8"
 ARG TERRAGRUNT_VERSION="0.33.1"
 ARG PACKER_VERSION="1.7.7"
 ARG ANSIBLE_VERSION="2.9.23"
-ARG AWS_CLI_VERSION="1.18.147"
-ARG AWS_IAM_AUTHENTICATOR_VERSION="1.21.2"
+ARG AWS_CLI_VERSION="1.23.12"
+ARG AWS_IAM_AUTHENTICATOR_VERSION="0.5.7"
 ARG KUBECTL_VERSION="1.22.2"
 ARG HELM_VERSION="3.7.1"
 ARG SOPS_VERSION="3.7.2"
@@ -43,9 +43,10 @@ RUN python3 -m pip install --no-cache-dir \
     aws --version && \
     ansible --version
 
-RUN wget https://amazon-eks.s3.us-west-2.amazonaws.com/${AWS_IAM_AUTHENTICATOR_VERSION}/2021-07-05/bin/linux/amd64/aws-iam-authenticator && \
-    mv aws-iam-authenticator /usr/local/bin/ && \
-    chmod +x /usr/local/bin/aws-iam-authenticator && \
+RUN wget https://github.com/kubernetes-sigs/aws-iam-authenticator/releases/download/v${AWS_IAM_AUTHENTICATOR_VERSION}/aws-iam-authenticator_${AWS_IAM_AUTHENTICATOR_VERSION}_linux_amd64 && \
+    mv aws-iam-authenticator_${AWS_IAM_AUTHENTICATOR_VERSION}_linux_amd64 /usr/local/bin/aws-iam-authenticator && \
+    chown root:root /usr/local/bin/aws-iam-authenticator && \
+    chmod a+x /usr/local/bin/aws-iam-authenticator && \
     aws-iam-authenticator version
 
 RUN wget https://dl.k8s.io/release/v${KUBECTL_VERSION}/bin/linux/amd64/kubectl && \
